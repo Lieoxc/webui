@@ -1,5 +1,8 @@
 # blog
-
+## Befor Dev
+```
+cd webui
+```
 ## Project setup
 ```
 npm install
