@@ -8,11 +8,11 @@
 				</a>
 			</div>
 			<div class="desc">
-				github.com/zxysilent/blog
+				github.com/Leo-xcli/blog
 			</div>
 		</div>
 		<div class="main">
-			<Form ref="loginForm" label-position="right" :label-width="65" :model="dataForm" :rules="rules">
+			<Form ref="loginForm" label-position="right" :label-width="75" :model="dataForm" :rules="rules">
 				<FormItem prop="num" label="账 号">
 					<Input size="large" prefix="ios-person-outline" type="text" v-model="dataForm.num" placeholder="请输入账号">
 					</Input>
