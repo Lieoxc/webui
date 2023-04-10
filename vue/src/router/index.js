@@ -21,6 +21,13 @@ const routes = [
 				name: "home",
 				meta: { title: "管理主页" },
 				component: () => import("@/views/home/index.vue")
+			},
+			{
+				path: "/cron",
+				name: "cron",
+				meta: {  title: "定时任务" },
+				component: Layout,
+				component: () => import("@/views/cron/cron.vue"),
 			}
 		]
 	},

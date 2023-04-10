@@ -23,7 +23,8 @@
 						</Tooltip>
 					</div>
 				</div>
-				<Menu ref="menu" :active-name="$route.name.split('-')[0]" :open-names="[$route.meta.module,$route.name.split('-')]" theme="dark" width="auto" accordion>
+				<Menu ref="menu" :active-name="$route.name.split('-')[0]" :open-names="[$route.meta.module,$route.name.split('-')]" 
+				theme="dark" width="auto" accordion>
 					<MenuItem name="home" to="/home">
 					<Icon type="ios-home-outline" />管理主页</MenuItem>
 					<Submenu name="sys">
@@ -50,37 +51,8 @@
 						<MenuItem name="tag" to="/tag/list">
 						<Icon type="ios-pricetags-outline" />标签管理</MenuItem>
 					</Submenu>
-					<!-- <Submenu name="setting">
-						<template slot="title">
-							<Icon type="ios-cog-outline" />
-							系统设置
-						</template>
-						<MenuItem name="setting-base" to="/setting/base">
-						<Icon type="ios-cog-outline" />基本设置</MenuItem>
-						<MenuItem name="setting-comment" to="/setting/comment">
-						<Icon type="ios-text-outline" />评论设置</MenuItem>
-						<MenuItem name="setting-analytic" to="/setting/analytic">
-						<Icon type="ios-pulse" /> 统计设置</MenuItem>
-						<MenuItem name="setting-custom" to="/setting/custom">
-						<Icon type="ios-code-working" /> 自 定 义</MenuItem>
-					</Submenu> -->
-					<!-- <MenuItem name="home" to="/home">
-					<Icon type="ios-home-outline" /> 管理主页</MenuItem>
-					<template v-for="item in getMenus">
-						<Submenu v-if="item.children && item.show" :name="item.name" :key="item.name">
-							<template slot="title">
-								<Icon :type="item.icon"></Icon>
-								{{item.title}}
-							</template>
-							<MenuItem :name="itm.name" v-for="itm in item.children" v-if="itm.show" :to="itm.path" :key="itm.name">
-							<Icon :type="itm.icon"></Icon>{{itm.title}}
-							</MenuItem>
-						</Submenu>
-						<MenuItem v-else-if="item.show" :name="item.name" :to="item.path" :key="item.name">
-						<Icon :type="item.icon"></Icon>
-						{{item.title}}
-						</MenuItem>
-					</template> -->
+					<MenuItem name="cron" to="/cron">
+					<Icon type="ios-clock-outline" />定时任务</MenuItem>
 				</Menu>
 			</div>
 		</Sider>
