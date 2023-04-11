@@ -146,6 +146,7 @@ export default {
     methods: {
         showInput() {
             this.showModal = true;
+            this.inputTableFrom={}
         },
         showModify() {
             this.showModal = true;
