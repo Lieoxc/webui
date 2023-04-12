@@ -17,7 +17,7 @@
                 </FormItem>
             </Form>
 
-             <!-- 按编辑或者添加的 弹窗 -->
+            <!-- 按编辑或者添加的 弹窗 -->
             <Modal v-model="showModal" title="添加定时任务" :closable="false" @on-ok="handleOk">
                 <Form :model="inputTableFrom">
                     <FormItem label="名称">
@@ -39,16 +39,16 @@
                 </Form>
             </Modal>
 
-            <!-- 表格头部 -->
-            <Table stripe border ref="selection" height="200px" @on-selection-change="tableSelectChange" :columns="columns1"
+            <!-- 表格n内容-->
+            <Table stripe border ref="selection"  @on-selection-change="tableSelectChange" :columns="columns1"
                 :data="tableData">
                 <template slot-scope="{ row }" slot="status">
-                    <div v-if = "row.status == 'Start'">
+                    <div v-if="row.status == 'Start'">
                         <strong>启用</strong>
-                    </div>   
+                    </div>
                     <div v-else>
                         <strong>禁用 </strong>
-                    </div>  
+                    </div>
                 </template>
                 <template slot-scope="{ row, index }" slot="action">
                     <Button type="info" size="small" style="margin-right: 5px" @click="modify(row)">编辑</Button>
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { apiCronTaskpage } from "@/api/cronTask";
+
 export default {
     data() {
         return {
@@ -98,29 +100,7 @@ export default {
                     width: 150,
                 }
             ],
-            tableData: [
-                {
-                    id: 1,
-                    name: 'John Brown',
-                    content: "0/5 * * * *",
-                    callFunc: "heloworld",
-                    status: 'Stop',
-                },
-                {
-                    id: 2,
-                    name: 'John Brown',
-                    content: "0/56 * * * *",
-                    callFunc: "heloworld",
-                    status: 'Stop',
-                },
-                {
-                    id: 2,
-                    name: 'John Brown',
-                    content: "0/2 * * * *",
-                    callFunc: "heloworld",
-                    status: 'Start',
-                }
-            ],
+            tableData: [],
             inputTableFrom: {
                 name: "",
                 content: "",
@@ -140,13 +120,31 @@ export default {
             showModal: false, // 是否显示弹窗
             //disableModifyButtom: true, //是否关闭修改按钮
             disableDeleteButtom: true, //是否闭删除按钮
-            multipleSelection: []  //多选状态
+            multipleSelection: [],  //多选状态
+            tableCount:0, //定时任务的总数
+            tabPage: { pi: 1, ps: 12 }, //分页参数
         }
     },
+    //在组件挂载到 DOM 后执行函数
+    mounted() {
+        this.init()
+        console.log('mount data');
+    },
     methods: {
+        init() { //获取目前已经存在的定时任务数据
+            apiCronTaskpage(this.tabPage).then((resp) => {
+				if (resp.code == 200) {
+					this.tableData = resp.data.items;
+					this.tabCount = resp.data.count;
+				} else {
+					this.tableData = [];
+					this.tabCount = 0;
+				}
+			});
+        },
         showInput() {
             this.showModal = true;
-            this.inputTableFrom={}
+            this.inputTableFrom = {}
         },
         showModify() {
             this.showModal = true;
@@ -161,7 +159,7 @@ export default {
                 this.multipleSelection.push(item.id)
             }) //将选中的值  id保存到 multipleSelection数组
             console.log('table select ', this.multipleSelection);
-            if (this.multipleSelection.length  >0 ) { //单选的时候支持 删除和修改
+            if (this.multipleSelection.length > 0) { //单选的时候支持 删除和修改
                 this.disableDeleteButtom = false
                 //this.disableModifyButtom = false
             } else { //未选中是，删除和修改都不支持
