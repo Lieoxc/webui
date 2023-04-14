@@ -10,8 +10,8 @@
             <Form inline>
                 <FormItem>
                     <Button type="primary" icon="ios-add-circle-outline" style="margin-right: 10px"
-                        @click="showInput">新增</Button>
-                    <Button type="error" icon="md-trash" :disabled="disableDeleteButtom"> 删除</Button>
+                        @click="handleAdd">新增</Button>
+                    <Button type="error" icon="md-trash" :disabled="disableDeleteButtom" @click="handleDel"> 删除</Button>
                 </FormItem>
             </Form>
 
@@ -131,7 +131,6 @@ export default {
     methods: {
         init() { //获取目前已经存在的定时任务数据
             this.inputTableFrom = {} //清空弹框的预置内容
-
             apiCronTaskpage(this.tabPage).then((resp) => {
                 if (resp.code == 200) {
                     this.tableData = resp.data.items;
@@ -142,10 +141,22 @@ export default {
                 }
             });
         },
-        showInput() {
+        handleAdd() {
             this.showModal = true;
             this.modfiyFlag = false;
             this.inputTableFrom = {}
+        },
+        handleDel() {
+            if (this.multipleSelection.length > 0) {
+                admCronTaskDrop({ id: this.multipleSelection }).then((resp) => {
+                    if (resp.code == 200) {
+                        this.$Message.success({ content: "添加成功" });
+                    } else {
+                        this.$Message.error({ content: resp.msg, duration: 3 });
+                    }
+                    this.init()
+                })
+            }
         },
 
 
@@ -180,16 +191,16 @@ export default {
                 this.multipleSelection.push(item.id)
             }) //将选中的值  id保存到 multipleSelection数组
             console.log('table select ', this.multipleSelection);
-            if (this.multipleSelection.length > 0) { //单选的时候支持 删除和修改
+            if (this.multipleSelection.length > 0) { //单选的时候支持 删除
                 this.disableDeleteButtom = false
-            } else { //未选中是，删除和修改都不支持
+            } else { //未选中是，删除不支持
                 this.disableDeleteButtom = true
             }
 
         },
         remove(row) {
             console.log('remove index ', row.id);
-            admCronTaskDrop({ id: row.id }).then((resp) => {
+            admCronTaskDrop({ id: [row.id] }).then((resp) => {
                 if (resp.code == 200) {
                     this.$Message.success({ content: "添加成功" });
                 } else {
