@@ -25,7 +25,10 @@
                         <Input v-model="inputTableFrom.content" />
                     </FormItem>
                     <FormItem label="调用目标">
-                        <Input v-model="inputTableFrom.callFunc" />
+                        <Select v-model="inputTableFrom.callFunc">
+                            <Option v-for="item in funcList" :value="item" :key="item">{{ item }}
+                            </Option>
+                        </Select>
                     </FormItem>
                     <FormItem label="任务状态">
                         <Select v-model="inputTableFrom.status">
@@ -58,7 +61,7 @@
 </template>
 
 <script>
-import { apiCronTaskpage, admCronTaskAdd, admCronTaskDrop, admCronTaskEdit } from "@/api/cronTask";
+import { apiCronTaskpage, admCronTaskAdd, admCronTaskDrop, admCronTaskEdit, apiCronTaskFunc } from "@/api/cronTask";
 
 export default {
     data() {
@@ -121,12 +124,13 @@ export default {
             multipleSelection: [],  //多选状态
             tableCount: 0, //定时任务的总数
             tabPage: { pi: 1, ps: 12 }, //分页参数
+            funcList: []
         }
     },
     //在组件挂载到 DOM 后执行函数
     mounted() {
         this.init()
-        console.log('mount data');
+        console.log('mount data', this.funcList);
     },
     methods: {
         init() { //获取目前已经存在的定时任务数据
@@ -138,6 +142,13 @@ export default {
                 } else {
                     this.tableData = [];
                     this.tabCount = 0;
+                }
+            });
+            apiCronTaskFunc().then((resp) => {
+                if (resp.code == 200) {
+                    this.funcList = resp.data;
+                } else {
+                    this.funcList = [];
                 }
             });
         },
@@ -158,7 +169,6 @@ export default {
                 })
             }
         },
-
 
         handleConfirm() {
             console.log('输入框的值是：', this.inputTableFrom);
@@ -202,7 +212,7 @@ export default {
             console.log('remove index ', row.id);
             admCronTaskDrop({ id: [row.id] }).then((resp) => {
                 if (resp.code == 200) {
-                    this.$Message.success({ content: "添加成功" });
+                    this.$Message.success({ content: "删除成功" });
                 } else {
                     this.$Message.error({ content: resp.msg, duration: 3 });
                 }

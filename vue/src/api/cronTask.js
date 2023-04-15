@@ -7,6 +7,14 @@ export const apiCronTaskpage = (data) => {
 		params: data,
 	});
 };
+// 获取定时任务分页
+export const apiCronTaskFunc = () => {
+    return fetch.request({
+		url: "/api/cron/func",
+		method: "get",
+	});
+};
+
 // 添加标签
 export const admCronTaskAdd = (data) => {
     return fetch.request({
