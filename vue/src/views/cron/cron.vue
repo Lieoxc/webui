@@ -41,7 +41,7 @@
             <Table stripe border ref="selection" @on-selection-change="tableSelectChange" :columns="columns1"
                 :data="tableData">
                 <template slot-scope="{ row }" slot="status">
-                    <div v-if="row.status == 'start'">
+                    <div v-if="row.status == 2">
                         <strong>启用</strong>
                     </div>
                     <div v-else>
@@ -107,11 +107,11 @@ export default {
             },
             workStatus: [
                 {
-                    value: 'start',
+                    value: 2,
                     label: '启用'
                 },
                 {
-                    value: 'stop',
+                    value: 1,
                     label: '禁用'
                 }
             ],
